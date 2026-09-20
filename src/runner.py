@@ -289,7 +289,8 @@ def _generate_answer(case, artifact: dict, settings: Settings, args) -> None:
         return
     print(f"{case_tag} Generating answer with {args.eval_model}...", file=sys.stderr, flush=True)
     answer = OpenAIAnswerer(settings.openai_api_key or "", args.eval_model).call(
-        case.question, artifact["packed_context"])
+        case.question, artifact["packed_context"], getattr(case, "question_date", None)
+    )
     artifact.update({
         "answer": answer.text,
         "answer_token_usage": {"input": answer.input_tokens, "output": answer.output_tokens},

@@ -45,12 +45,12 @@
     "context_turns": 1
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.007099999493220821,
-    "reranker_model_load_ms": 0.0016000012692529708,
-    "ingestion_ms": 0.4273000013199635,
-    "tree_initialization_ms": 0.3187000002071727
+    "embedding_model_load_ms": 0.006300000677583739,
+    "reranker_model_load_ms": 0.0024000000848900527,
+    "ingestion_ms": 0.5416999993030913,
+    "tree_initialization_ms": 0.31400000079884194
   },
-  "total_latency_ms": 12.867599998571677,
+  "total_latency_ms": 13.570600000093691,
   "answer": "Tea",
   "answer_token_usage": {
     "input": 0,

@@ -36,9 +36,10 @@ class OpenAIAnswerer:
         self.api_key, self.model = api_key, model
         self.session = session or requests.Session()
 
-    def call(self, question: str, evidence: str) -> ModelResult:
+    def call(self, question: str, evidence: str, question_date: str | None = None) -> ModelResult:
         start = time.perf_counter()
-        input_text = f"Retrieved conversation evidence:\n{evidence}\n\nCurrent User Question to answer:\n{question}"
+        date_line = f"Current Interaction Date: {question_date}\n" if question_date else ""
+        input_text = f"Retrieved conversation evidence:\n{evidence}\n\n{date_line}Current User Question to answer:\n{question}"
         response = self.session.post(
             "https://api.openai.com/v1/responses",
             headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},

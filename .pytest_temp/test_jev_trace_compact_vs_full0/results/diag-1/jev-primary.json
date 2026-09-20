@@ -95,7 +95,7 @@
         "user"
       ],
       "average_decision_confidence": 0.2533333333333333,
-      "jev_latency_ms": 0.09710000085760839,
+      "jev_latency_ms": 0.08549999984097667,
       "jev_cost": 0.0,
       "routing_profile": "lean",
       "cross_case_cache_hits": 0,
@@ -104,10 +104,10 @@
     "candidate_reduction_vs_corpus": 0.0
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.005399997462518513,
-    "reranker_model_load_ms": 0.0013999997463542968,
-    "ingestion_ms": 0.47620000259485096,
-    "tree_initialization_ms": 0.3130000004603062
+    "embedding_model_load_ms": 0.005099998816149309,
+    "reranker_model_load_ms": 0.0017000020307023078,
+    "ingestion_ms": 0.6454000031226315,
+    "tree_initialization_ms": 0.29720000020461157
   },
   "jev_usage": {
     "routing_profile": "lean",
@@ -128,7 +128,7 @@
       "input_hash": "a46d1c62d3ff8b0b1c6f32cfe573bc8b1545eb1ca5fb32405420203992bd6440",
       "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.06450000000768341,
+      "latency_ms": 0.04459999763639644,
       "cost": 0.0
     },
     {
@@ -138,9 +138,9 @@
       "input_hash": "2c28edd45a00f7aecbf32a95497d0b6ae7529be7008c3912e3006881a05df9f8",
       "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
       "confidence": 0.6000000000000001,
-      "latency_ms": 0.006599999323952943,
+      "latency_ms": 0.004600002284860238,
       "cost": 0.0
     }
   ],
-  "total_latency_ms": 24.74390000134008
+  "total_latency_ms": 22.422000001824927
 }
