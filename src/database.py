@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS turns(
  id INTEGER PRIMARY KEY, case_id TEXT NOT NULL, session_id TEXT NOT NULL,
  session_index INTEGER NOT NULL, turn_index INTEGER NOT NULL, role TEXT NOT NULL,
  content TEXT NOT NULL, session_time TEXT, content_hash TEXT NOT NULL,
- UNIQUE(case_id, session_id, turn_index)
+ UNIQUE(case_id, session_index, turn_index)
 );
 CREATE TABLE IF NOT EXISTS sentences(
  id INTEGER PRIMARY KEY, turn_id INTEGER NOT NULL REFERENCES turns(id),
@@ -69,6 +69,27 @@ class MemoryDB:
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA synchronous=NORMAL")
         self.conn.execute("PRAGMA temp_store=MEMORY")
+        self._ensure_schema()
+
+    def _ensure_schema(self) -> None:
+        row = self.conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name='turns'"
+        ).fetchone()
+        if row and "session_index, turn_index" not in row["sql"] and "session_index,turn_index" not in row["sql"]:
+            self.conn.execute("PRAGMA foreign_keys=OFF")
+            self.conn.execute(
+                "CREATE TABLE turns_new("
+                " id INTEGER PRIMARY KEY, case_id TEXT NOT NULL, session_id TEXT NOT NULL,"
+                " session_index INTEGER NOT NULL, turn_index INTEGER NOT NULL, role TEXT NOT NULL,"
+                " content TEXT NOT NULL, session_time TEXT, content_hash TEXT NOT NULL,"
+                " UNIQUE(case_id, session_index, turn_index)"
+                ")"
+            )
+            self.conn.execute("INSERT INTO turns_new SELECT * FROM turns")
+            self.conn.execute("DROP TABLE turns")
+            self.conn.execute("ALTER TABLE turns_new RENAME TO turns")
+            self.conn.execute("PRAGMA foreign_keys=ON")
+            self.conn.commit()
         self.conn.executescript(SCHEMA)
 
     def close(self) -> None:

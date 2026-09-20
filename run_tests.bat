@@ -25,7 +25,7 @@ REM ============================================================
 python -m pytest tests -q
 if errorlevel 1 goto :error
 
-python -m src.runner --mode jev-primary --trace-jev --limit 1 --resume
+python -m src.runner --mode jev-primary --trace-jev --limit 10 --resume
 
 if errorlevel 1 goto :error
 

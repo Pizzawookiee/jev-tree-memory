@@ -26,8 +26,8 @@ def expand_and_pack(db: MemoryDB, evidence: list[Evidence], query_type: str, max
         session_key = (int(row["session_index"]), row["session_id"], row["session_time"])
         candidates = [row]
         candidates.extend(db.conn.execute(
-            "SELECT * FROM turns WHERE case_id=? AND session_id=? AND turn_index BETWEEN ? AND ?",
-            (row["case_id"], row["session_id"], max(0, row["turn_index"] - 1), row["turn_index"] + 1),
+            "SELECT * FROM turns WHERE case_id=? AND session_index=? AND turn_index BETWEEN ? AND ?",
+            (row["case_id"], row["session_index"], max(0, row["turn_index"] - 1), row["turn_index"] + 1),
         ))
         # The hit itself is first; adjacent context follows in chronological order.
         candidates = [row] + sorted(
