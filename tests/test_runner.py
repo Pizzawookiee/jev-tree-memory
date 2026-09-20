@@ -110,3 +110,69 @@ def test_jev_trace_compact_vs_full_diagnostics(tmp_path, monkeypatch):
     assert any(step.get("phase") == "memory-routing" for step in full_jev["jev_trace"])
     assert len(full_jev["jev_trace"]) > len(compact_jev["jev_trace"])
 
+
+def test_section_flags_and_logging_clarity(tmp_path, monkeypatch, capsys):
+    dataset = tmp_path / "sections.json"
+    dataset.write_text(json.dumps([
+        {
+            "question_id": "q-user-1", "question_type": "single-session-user",
+            "question": "What is my job?", "answer": "engineer",
+            "haystack_session_ids": ["s1"], "haystack_dates": ["2024-01-01"],
+            "haystack_sessions": [[{"role": "user", "content": "I am an engineer."}]],
+            "answer_session_ids": ["s1"],
+        },
+        {
+            "question_id": "q-temp-1", "question_type": "temporal-reasoning",
+            "question": "When did I travel?", "answer": "June",
+            "haystack_session_ids": ["s2"], "haystack_dates": ["2024-06-01"],
+            "haystack_sessions": [[{"role": "user", "content": "I traveled in June."}]],
+            "answer_session_ids": ["s2"],
+        },
+        {
+            "question_id": "q-pref-1", "question_type": "single-session-preference",
+            "question": "What drink do I like?", "answer": "tea",
+            "haystack_session_ids": ["s3"], "haystack_dates": ["2024-02-01"],
+            "haystack_sessions": [[{"role": "user", "content": "I like tea."}]],
+            "answer_session_ids": ["s3"],
+        },
+    ]), encoding="utf-8")
+    results = tmp_path / "results"
+    monkeypatch.setenv("RESULTS_DIR", str(results))
+
+    # Test 1: --temporal flag filters only temporal-reasoning questions and logs section tag
+    code = runner.main([
+        "--mode", "baseline", "--dataset", str(dataset), "--retrieval-only",
+        "--temporal", "--allow-model-fallback",
+    ])
+    assert code == 0
+    err = capsys.readouterr().err
+    assert "[q-temp-1 | temporal-reasoning] Starting baseline retrieval" in err
+    assert "q-user-1" not in err
+    assert "q-pref-1" not in err
+    assert (results / "q-temp-1" / "baseline.json").exists()
+    assert not (results / "q-user-1" / "baseline.json").exists()
+
+    # Test 2: --preference flag filters only preference questions
+    code = runner.main([
+        "--mode", "baseline", "--dataset", str(dataset), "--retrieval-only",
+        "--preference", "--allow-model-fallback",
+    ])
+    assert code == 0
+    err = capsys.readouterr().err
+    assert "[q-pref-1 | single-session-preference] Starting baseline retrieval" in err
+    assert "q-user-1" not in err
+    assert "q-temp-1" not in err
+    assert (results / "q-pref-1" / "baseline.json").exists()
+
+    # Test 3: Without flags, all cases are processed (default behavior preserved)
+    code = runner.main([
+        "--mode", "baseline", "--dataset", str(dataset), "--retrieval-only",
+        "--allow-model-fallback",
+    ])
+    assert code == 0
+    err = capsys.readouterr().err
+    assert "[q-user-1 | single-session-user] Starting baseline retrieval" in err
+    assert "[q-temp-1 | temporal-reasoning] Starting baseline retrieval" in err
+    assert "[q-pref-1 | single-session-preference] Starting baseline retrieval" in err
+
+

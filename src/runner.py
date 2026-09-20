@@ -9,7 +9,7 @@ from pathlib import Path
 import requests
 
 from .answer import OpenAIAnswerer
-from .benchmark import load_cases
+from .benchmark import load_cases, normalize_question_type
 from .config import Settings, USE_DIRECT_CONTEXT
 from .context import expand_and_pack
 from .database import MemoryDB
@@ -52,7 +52,8 @@ def _query_type_from_benchmark(value: str) -> str:
 
 
 def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
-    print(f"[{case.case_id}] Starting {mode} retrieval", file=sys.stderr, flush=True)
+    case_tag = f"[{case.case_id} | {case.question_type}]" if getattr(case, "question_type", None) else f"[{case.case_id}]"
+    print(f"{case_tag} Starting {mode} retrieval", file=sys.stderr, flush=True)
     stage_timings: dict[str, float] = {}
     case_dir = settings.results_dir / "databases"
     case_dir.mkdir(parents=True, exist_ok=True)
@@ -71,14 +72,14 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
         and db.metadata("embedding_identity") != embedding_identity
     ):
         print(
-            f"[{case.case_id}] Embedding configuration changed; rebuilding the case database",
+            f"{case_tag} Embedding configuration changed; rebuilding the case database",
             file=sys.stderr,
             flush=True,
         )
         db.close()
         db_path.unlink()
         db = MemoryDB(db_path)
-    print(f"[{case.case_id}] Loading embedding model...", file=sys.stderr, flush=True)
+    print(f"{case_tag} Loading embedding model...", file=sys.stderr, flush=True)
     stage_started = time.perf_counter()
     embedder = LocalEmbedder(
         settings.embedding_model,
@@ -91,22 +92,22 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
     )
     stage_timings["embedding_model_load_ms"] = (time.perf_counter() - stage_started) * 1000
     print(
-        f"[{case.case_id}] Embedding model ready in {stage_timings['embedding_model_load_ms'] / 1000:.2f}s",
+        f"{case_tag} Embedding model ready in {stage_timings['embedding_model_load_ms'] / 1000:.2f}s",
         file=sys.stderr, flush=True,
     )
-    print(f"[{case.case_id}] Loading cross-encoder reranker...", file=sys.stderr, flush=True)
+    print(f"{case_tag} Loading cross-encoder reranker...", file=sys.stderr, flush=True)
     stage_started = time.perf_counter()
     reranker = CrossEncoderReranker(
         settings.reranker_model, args.allow_model_fallback, settings.reranker_batch_size
     )
     stage_timings["reranker_model_load_ms"] = (time.perf_counter() - stage_started) * 1000
     print(
-        f"[{case.case_id}] Cross-encoder ready in {stage_timings['reranker_model_load_ms'] / 1000:.2f}s",
+        f"{case_tag} Cross-encoder ready in {stage_timings['reranker_model_load_ms'] / 1000:.2f}s",
         file=sys.stderr, flush=True,
     )
     if not db.conn.execute("SELECT 1 FROM turns LIMIT 1").fetchone():
         print(
-            f"[{case.case_id}] Splitting and embedding {len(case.turns):,} raw turns...",
+            f"{case_tag} Splitting and embedding {len(case.turns):,} raw turns...",
             file=sys.stderr,
             flush=True,
         )
@@ -115,7 +116,7 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
         db.set_metadata("embedding_identity", embedding_identity)
         stage_timings["ingestion_ms"] = (time.perf_counter() - stage_started) * 1000
         print(
-            f"[{case.case_id}] Ingestion complete: {len(sentence_ids):,} sentences indexed "
+            f"{case_tag} Ingestion complete: {len(sentence_ids):,} sentences indexed "
             f"in {stage_timings['ingestion_ms'] / 1000:.2f}s",
             file=sys.stderr,
             flush=True,
@@ -123,17 +124,17 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
     else:
         sentence_count = db.conn.execute("SELECT count(*) FROM sentences").fetchone()[0]
         print(
-            f"[{case.case_id}] Using cached ingestion: {sentence_count:,} sentences",
+            f"{case_tag} Using cached ingestion: {sentence_count:,} sentences",
             file=sys.stderr,
             flush=True,
         )
-    print(f"[{case.case_id}] Initializing memory tree...", file=sys.stderr, flush=True)
+    print(f"{case_tag} Initializing memory tree...", file=sys.stderr, flush=True)
     stage_started = time.perf_counter()
     tree = MemoryTree(db, embedder, settings.max_depth)
     tree.initialize()
     stage_timings["tree_initialization_ms"] = (time.perf_counter() - stage_started) * 1000
     print(
-        f"[{case.case_id}] Memory tree ready in {stage_timings['tree_initialization_ms'] / 1000:.2f}s",
+        f"{case_tag} Memory tree ready in {stage_timings['tree_initialization_ms'] / 1000:.2f}s",
         file=sys.stderr, flush=True,
     )
     retriever = Retriever(db, embedder, tree)
@@ -230,7 +231,7 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
         corpus_size = max(1, db.conn.execute("SELECT count(*) FROM sentences").fetchone()[0])
         metrics["candidate_reduction_vs_corpus"] = 1 - len(candidates) / corpus_size
     artifact = {
-        "case_id": case.case_id, "mode": mode, "status": "retrieval-complete",
+        "case_id": case.case_id, "question_type": case.question_type, "mode": mode, "status": "retrieval-complete",
         "question": case.question, "query_type": query_type,
         "backends": {"embeddings": embedder.backend, "reranker": reranker.backend,
                      "jev": jev_client.backend if jev_client else None, "answerer": None},
@@ -274,6 +275,7 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
 def _generate_answer(case, artifact: dict, settings: Settings, args) -> None:
     if args.reuse_generations and artifact.get("answer"):
         return
+    case_tag = f"[{case.case_id} | {case.question_type}]" if getattr(case, "question_type", None) else f"[{case.case_id}]"
     if args.allow_model_fallback:
         excerpts = [item["content"] for item in artifact.get("retrieved_evidence", [])[:3]]
         artifact.update({
@@ -285,6 +287,7 @@ def _generate_answer(case, artifact: dict, settings: Settings, args) -> None:
         })
         artifact["backends"]["answerer"] = "deterministic-extractive-fallback"
         return
+    print(f"{case_tag} Generating answer with {args.eval_model}...", file=sys.stderr, flush=True)
     answer = OpenAIAnswerer(settings.openai_api_key or "", args.eval_model).call(
         case.question, artifact["packed_context"])
     artifact.update({
@@ -324,6 +327,7 @@ def _apply_manual_answer(case, artifact: dict, answers: dict[str, dict]) -> None
 
 def run_case(case, modes: list[str], settings: Settings, args) -> list[dict]:
     outputs = []
+    case_tag = f"[{case.case_id} | {case.question_type}]" if getattr(case, "question_type", None) else f"[{case.case_id}]"
     db_path = settings.results_dir / "databases" / f"{case.case_id}.sqlite"
     if db_path.exists() and not args.resume and not args.judge_only and not args.reuse_generations:
         db_path.unlink()
@@ -336,6 +340,7 @@ def run_case(case, modes: list[str], settings: Settings, args) -> list[dict]:
                 raise RuntimeError(f"--judge-only requires a cached answer at {path}")
             artifact = cached
         elif args.reuse_generations and cached and cached.get("answer"):
+            print(f"{case_tag} Reusing cached generation for {mode}", file=sys.stderr, flush=True)
             artifact = cached
         elif args.resume and cached and (
             args.retrieval_only or (args.answer_only and cached.get("answer")) or
@@ -343,6 +348,7 @@ def run_case(case, modes: list[str], settings: Settings, args) -> list[dict]:
             (args.manual_judge and (cached.get("answer") or (args.manual_answer_input and cached.get("packed_context")))) or
             (not args.answer_only and not args.manual_judge and cached.get("answer"))
         ):
+            print(f"{case_tag} Using cached {mode} artifact ({cached.get('status', 'complete')})", file=sys.stderr, flush=True)
             artifact = cached
         else:
             artifact = _retrieve_case(case, mode, settings, args)
@@ -417,6 +423,35 @@ def parse_args(argv=None):
         help="remove per-case SQLite database file after artifact generation to conserve storage",
     )
     parser.add_argument("--dataset", type=Path)
+    section_group = parser.add_argument_group("section / question-type selection")
+    section_group.add_argument(
+        "--question-type", "--section", dest="question_type",
+        help="filter questions by section/type (e.g. single-session-user, temporal, multi-session, preference, knowledge-update)",
+    )
+    section_group.add_argument(
+        "--single-session-user", action="store_true",
+        help="filter questions to single-session-user section",
+    )
+    section_group.add_argument(
+        "--single-session-assistant", "--assistant", action="store_true", dest="single_session_assistant",
+        help="filter questions to single-session-assistant section",
+    )
+    section_group.add_argument(
+        "--preference", "--single-session-preference", action="store_true", dest="preference",
+        help="filter questions to preference section (single-session-preference)",
+    )
+    section_group.add_argument(
+        "--temporal", "--temporal-reasoning", action="store_true", dest="temporal",
+        help="filter questions to temporal section (temporal-reasoning)",
+    )
+    section_group.add_argument(
+        "--multi-session", "--multi", action="store_true", dest="multi_session",
+        help="filter questions to multi-session section",
+    )
+    section_group.add_argument(
+        "--knowledge-update", "--update", action="store_true", dest="knowledge_update",
+        help="filter questions to knowledge-update section",
+    )
     args = parser.parse_args(argv)
     if args.manual_judge and args.retrieval_only:
         parser.error("--manual-judge cannot be combined with --retrieval-only")
@@ -449,20 +484,48 @@ def main(argv=None) -> int:
         print("LONGMEMEVAL_PATH or --dataset must point to a LongMemEval JSON/JSONL file", file=sys.stderr)
         return 2
     modes = ["baseline", "jev-primary"] if args.compare or not args.mode else [args.mode]
-    cases = list(load_cases(dataset, args.case_id, None if args.all else args.limit))
+    selected_types: list[str] = []
+    if args.question_type:
+        for part in args.question_type.split(","):
+            part_norm = normalize_question_type(part)
+            if part_norm and part_norm not in selected_types:
+                selected_types.append(part_norm)
+    if getattr(args, "single_session_user", False) and "single-session-user" not in selected_types:
+        selected_types.append("single-session-user")
+    if getattr(args, "single_session_assistant", False) and "single-session-assistant" not in selected_types:
+        selected_types.append("single-session-assistant")
+    if getattr(args, "preference", False) and "single-session-preference" not in selected_types:
+        selected_types.append("single-session-preference")
+    if getattr(args, "temporal", False) and "temporal-reasoning" not in selected_types:
+        selected_types.append("temporal-reasoning")
+    if getattr(args, "multi_session", False) and "multi-session" not in selected_types:
+        selected_types.append("multi-session")
+    if getattr(args, "knowledge_update", False) and "knowledge-update" not in selected_types:
+        selected_types.append("knowledge-update")
+
+    cases = list(load_cases(dataset, args.case_id, None if args.all else args.limit, question_type=selected_types or None))
     if not cases:
-        print("No matching LongMemEval cases", file=sys.stderr)
+        if selected_types:
+            print(f"No matching LongMemEval cases for section(s): {', '.join(selected_types)}", file=sys.stderr)
+        else:
+            print("No matching LongMemEval cases", file=sys.stderr)
         return 2
     case_ids = [case.case_id for case in cases]
     if len(case_ids) != len(set(case_ids)):
         print("The selected LongMemEval cases contain duplicate question_id values", file=sys.stderr)
         return 2
-    if args.all and len(cases) != 500:
+    if args.all and not selected_types and len(cases) != 500:
         print(
             f"--all requires the official 500-case LongMemEval set; loaded {len(cases):,} cases",
             file=sys.stderr,
         )
         return 2
+    if selected_types:
+        print(
+            f"Loaded {len(cases):,} case(s) for section(s): {', '.join(selected_types)}",
+            file=sys.stderr,
+            flush=True,
+        )
 
     run_official_evaluation = (
         not args.retrieval_only
@@ -533,14 +596,23 @@ def main(argv=None) -> int:
                     f"overall={metrics['overall_accuracy']:.4f}, "
                     f"task-averaged={metrics['task_averaged_accuracy']:.4f}"
                 )
+                by_type = metrics.get("by_question_type", {})
+                if by_type:
+                    print("Accuracy by section:")
+                    for qt, item in sorted(by_type.items()):
+                        acc = item.get("accuracy")
+                        count = item.get("count", 0)
+                        acc_str = f"{acc:.4f}" if acc is not None else "N/A"
+                        print(f"  - {qt}: {acc_str} ({count} case{'s' if count != 1 else ''})")
                 print(f"Evaluation log: {result_path}")
                 print(f"Metrics: {metrics_path}")
         except (RuntimeError, ValueError, requests.RequestException) as exc:
             print(str(exc), file=sys.stderr)
             return 2
     else:
-        print(json.dumps([{"case_id": artifact["case_id"], "mode": artifact["mode"],
-                           "status": artifact["status"], "metrics": artifact["retrieval_metrics"]}
+        print(json.dumps([{"case_id": artifact["case_id"], "question_type": artifact.get("question_type"),
+                           "mode": artifact["mode"], "status": artifact["status"],
+                           "metrics": artifact["retrieval_metrics"]}
                           for _, artifact in records], indent=2))
     return 0
 

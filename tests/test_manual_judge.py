@@ -1,4 +1,5 @@
 import json
+import re
 from types import SimpleNamespace
 
 import pytest
@@ -143,7 +144,7 @@ def test_root_batch_script_contains_active_smoke_test():
     assert "python -m pytest tests -q" in active_commands
     assert any(
         command.startswith("python -m src.runner")
-        and "--limit 1" in command
+        and bool(re.search(r"--limit\s+\d+", command))
         and ("--compare" in command or "--mode jev-primary" in command)
         for command in active_commands
     )
