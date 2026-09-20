@@ -1,0 +1,105 @@
+{
+  "case_id": "real-shape-1",
+  "question_type": "single-session-preference",
+  "mode": "baseline",
+  "status": "retrieval-complete",
+  "question": "What drink do I prefer?",
+  "query_type": "PREFERENCE",
+  "backends": {
+    "embeddings": "deterministic-hash-fallback",
+    "reranker": "lexical-reranker-fallback",
+    "jev": null,
+    "answerer": null
+  },
+  "retrieved_evidence": [
+    {
+      "sentence_id": 1,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "I prefer tea to coffee.",
+      "vector_score": 0.3999999761581421,
+      "bm25_score": 1.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.6399999856948853,
+      "cross_score": 0.4,
+      "final_score": 0.5439999914169311,
+      "node_ids": []
+    },
+    {
+      "sentence_id": 2,
+      "turn_id": 2,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "assistant",
+      "content": "Noted.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.0,
+      "cross_score": 0.0,
+      "final_score": 0.0,
+      "node_ids": []
+    },
+    {
+      "sentence_id": 3,
+      "turn_id": 3,
+      "session_id": "s2",
+      "session_time": "2024-01-02",
+      "role": "user",
+      "content": "The weather is mild.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.0,
+      "cross_score": 0.0,
+      "final_score": 0.0,
+      "node_ids": []
+    },
+    {
+      "sentence_id": 4,
+      "turn_id": 4,
+      "session_id": "s2",
+      "session_time": "2024-01-02",
+      "role": "assistant",
+      "content": "Yes.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.0,
+      "cross_score": 0.0,
+      "final_score": 0.0,
+      "node_ids": []
+    }
+  ],
+  "context_turn_ids": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "packed_context": "\n[Session s1 | 2024-01-01]\nuser: I prefer tea to coffee.\nassistant: Noted.\n\n[Session s2 | 2024-01-02]\nuser: The weather is mild.\nassistant: Yes.\n",
+  "retrieval_metrics": {
+    "relevant_session_recall_at_5": 1.0,
+    "relevant_session_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_20": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "precision_at_context_cutoff": 0.25,
+    "answer_bearing_evidence_present": true,
+    "retrieved_candidates": 4,
+    "context_turns": 4
+  },
+  "stage_timings_ms": {
+    "embedding_model_load_ms": 0.007400001777568832,
+    "reranker_model_load_ms": 0.0018000027921516448,
+    "ingestion_ms": 0.6936999998288229,
+    "tree_initialization_ms": 0.40580000131740235
+  },
+  "total_latency_ms": 28.229600000486244
+}

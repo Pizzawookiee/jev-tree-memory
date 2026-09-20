@@ -1,0 +1,1 @@
+[{"question_id": "case_001", "question_type": "single-session-user", "question": "What drink?", "answer": "Tea", "question_date": "2024-02-01", "haystack_session_ids": ["s1"], "haystack_dates": ["2024-01-01"], "haystack_sessions": [[{"role": "user", "content": "I drink tea.", "has_answer": true}]], "answer_session_ids": ["s1"]}]

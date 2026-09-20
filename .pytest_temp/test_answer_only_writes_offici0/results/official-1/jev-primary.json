@@ -1,0 +1,118 @@
+{
+  "case_id": "official-1",
+  "question_type": "single-session-user",
+  "mode": "jev-primary",
+  "status": "answer-complete",
+  "question": "What drink?",
+  "query_type": "POINT_LOOKUP",
+  "backends": {
+    "embeddings": "deterministic-hash-fallback",
+    "reranker": "lexical-reranker-fallback",
+    "jev": "deterministic-jev-fallback",
+    "answerer": "deterministic-extractive-fallback"
+  },
+  "retrieved_evidence": [
+    {
+      "sentence_id": 1,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "I drink tea.",
+      "vector_score": 0.40824827551841736,
+      "bm25_score": 1.0,
+      "jev_score": 0.027777777777777776,
+      "priority_score": 0.0,
+      "hybrid_score": 0.26595095776849326,
+      "cross_score": 0.5,
+      "final_score": 0.359570574661096,
+      "node_ids": [
+        "user"
+      ]
+    }
+  ],
+  "context_turn_ids": [
+    1
+  ],
+  "packed_context": "\n[Session s1 | 2024-01-01]\nuser: I drink tea.\n",
+  "retrieval_metrics": {
+    "relevant_session_recall_at_5": 1.0,
+    "relevant_session_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_20": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "precision_at_context_cutoff": 1.0,
+    "answer_bearing_evidence_present": true,
+    "retrieved_candidates": 1,
+    "context_turns": 1,
+    "jev": {
+      "routing_recall": 1.0,
+      "root_branch_routing_accuracy": 1.0,
+      "topic_routing_recall": 1.0,
+      "answer_evidence_reachable": true,
+      "evidence_sufficiency_accuracy": null,
+      "average_tree_search_depth": 1,
+      "global_rescue_used": false,
+      "global_rescue_frequency": 0.0,
+      "search_steps": 2,
+      "selected_branches": [
+        "user"
+      ],
+      "average_decision_confidence": 0.3111111111111111,
+      "jev_latency_ms": 0.08459999662591144,
+      "jev_cost": 0.0,
+      "routing_profile": "lean",
+      "cross_case_cache_hits": 0,
+      "trivial_turns_filtered": 0
+    },
+    "candidate_reduction_vs_corpus": 0.0
+  },
+  "stage_timings_ms": {
+    "embedding_model_load_ms": 0.011600001016631722,
+    "reranker_model_load_ms": 0.0027999994927085936,
+    "ingestion_ms": 0.9816999991016928,
+    "tree_initialization_ms": 0.5009000014979392
+  },
+  "jev_usage": {
+    "routing_profile": "lean",
+    "requests": 3,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "input_usd_per_million_tokens": 0.042,
+    "output_usd_per_million_tokens": 0.0,
+    "estimated_cost": 0.0,
+    "cross_case_cache_hits": 0,
+    "trivial_turns_filtered": 0
+  },
+  "jev_trace": [
+    {
+      "id": 2,
+      "case_id": "official-1",
+      "phase": "query-routing",
+      "input_hash": "a46d1c62d3ff8b0b1c6f32cfe573bc8b1545eb1ca5fb32405420203992bd6440",
+      "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
+      "confidence": 0.16666666666666666,
+      "latency_ms": 0.054799998906673864,
+      "cost": 0.0
+    },
+    {
+      "id": 3,
+      "case_id": "official-1",
+      "phase": "evidence-sufficiency",
+      "input_hash": "2b8e0d574c7aca278f11d92de19f5b96fbe6ea6d935fa3a53b7f36e052adcafd",
+      "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
+      "confidence": 0.6000000000000001,
+      "latency_ms": 0.004599998646881431,
+      "cost": 0.0
+    }
+  ],
+  "answer": "I drink tea.",
+  "answer_token_usage": {
+    "input": 0,
+    "output": 0
+  },
+  "answer_estimated_cost": 0.0,
+  "answer_latency_ms": 0.0,
+  "answer_api_called": false,
+  "total_latency_ms": 25.321399996755645
+}

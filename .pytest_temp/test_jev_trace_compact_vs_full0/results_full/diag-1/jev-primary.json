@@ -1,0 +1,191 @@
+{
+  "case_id": "diag-1",
+  "question_type": "single-session-user",
+  "mode": "jev-primary",
+  "status": "retrieval-complete",
+  "question": "What drink?",
+  "query_type": "POINT_LOOKUP",
+  "backends": {
+    "embeddings": "deterministic-hash-fallback",
+    "reranker": "lexical-reranker-fallback",
+    "jev": "deterministic-jev-fallback",
+    "answerer": null
+  },
+  "retrieved_evidence": [
+    {
+      "sentence_id": 1,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "Fact one.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.027777777777777776,
+      "priority_score": 0.0,
+      "hybrid_score": 0.013888888888888888,
+      "cross_score": 0.0,
+      "final_score": 0.008333333333333333,
+      "node_ids": [
+        "user"
+      ]
+    },
+    {
+      "sentence_id": 2,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "Fact two.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.027777777777777776,
+      "priority_score": 0.0,
+      "hybrid_score": 0.013888888888888888,
+      "cross_score": 0.0,
+      "final_score": 0.008333333333333333,
+      "node_ids": [
+        "user"
+      ]
+    },
+    {
+      "sentence_id": 3,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "Fact three.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.027777777777777776,
+      "priority_score": 0.0,
+      "hybrid_score": 0.013888888888888888,
+      "cross_score": 0.0,
+      "final_score": 0.008333333333333333,
+      "node_ids": [
+        "user"
+      ]
+    }
+  ],
+  "context_turn_ids": [
+    1
+  ],
+  "packed_context": "\n[Session s1 | 2024-01-01]\nuser: Fact one. Fact two. Fact three.\n",
+  "retrieval_metrics": {
+    "relevant_session_recall_at_5": 1.0,
+    "relevant_session_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_20": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "precision_at_context_cutoff": 1.0,
+    "answer_bearing_evidence_present": true,
+    "retrieved_candidates": 3,
+    "context_turns": 1,
+    "jev": {
+      "routing_recall": 1.0,
+      "root_branch_routing_accuracy": 1.0,
+      "topic_routing_recall": 1.0,
+      "answer_evidence_reachable": true,
+      "evidence_sufficiency_accuracy": null,
+      "average_tree_search_depth": 1,
+      "global_rescue_used": false,
+      "global_rescue_frequency": 0.0,
+      "search_steps": 2,
+      "selected_branches": [
+        "user"
+      ],
+      "average_decision_confidence": 0.2533333333333333,
+      "jev_latency_ms": 0.13860000035492703,
+      "jev_cost": 0.0,
+      "routing_profile": "full",
+      "cross_case_cache_hits": 0,
+      "trivial_turns_filtered": 0
+    },
+    "candidate_reduction_vs_corpus": 0.0
+  },
+  "stage_timings_ms": {
+    "embedding_model_load_ms": 0.008300001354655251,
+    "reranker_model_load_ms": 0.0023999964469112456,
+    "ingestion_ms": 0.6697999997413717,
+    "tree_initialization_ms": 0.48040000183391385
+  },
+  "jev_usage": {
+    "routing_profile": "full",
+    "requests": 3,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "input_usd_per_million_tokens": 0.042,
+    "output_usd_per_million_tokens": 0.0,
+    "estimated_cost": 0.0,
+    "cross_case_cache_hits": 0,
+    "trivial_turns_filtered": 0
+  },
+  "jev_trace": [
+    {
+      "id": 1,
+      "case_id": "diag-1",
+      "phase": "memory-routing",
+      "input_hash": "e9c862098ab682416a1c308e3a4b6e2403a3b2799a035b19f1a2df2017417a76",
+      "available_options": "{\"create_topic\": {\"instructions\": \"Is there a clear named topic worth a shallow child node?\", \"type\": \"noul\"}, \"memory_type\": {\"criteria\": {\"event\": \"A time-bounded occurrence\", \"fact\": \"A durable factual statement\", \"other\": \"None of the other memory types\", \"preference\": \"A like, dislike, habit, or choice\", \"procedure\": \"Instructions or a repeatable method\", \"state\": \"A condition that may change\"}, \"instructions\": \"What kind of memory is this conversation turn?\", \"type\": \"choice\"}, \"primary_branch\": {\"criteria\": {\"environment\": \"Tools, systems, configuration, locations, and current state\", \"episodes\": \"Events, conversations, and time-bounded experiences\", \"preferences\": \"Likes, dislikes, habits, choices, and personal preferences\", \"procedures\": \"Instructions, methods, recipes, and repeatable processes\", \"projects\": \"Named projects, work streams, goals, and tasks\", \"user\": \"Stable facts about the user and their identity or background\"}, \"instructions\": \"Which memory branch best fits this turn?\", \"type\": \"choice\"}, \"priority\": {\"criteria\": {\"high\": \"Likely important for future questions\", \"low\": \"Unlikely to matter later\", \"normal\": \"Ordinary memory value\"}, \"instructions\": \"How valuable is this turn for later retrieval?\", \"type\": \"choice\"}, \"temporal\": {\"criteria\": {\"current\": \"Describes the current state\", \"historical\": \"True in the past\", \"timeless\": \"Not tied to a time\", \"unknown\": \"Time scope is unclear\"}, \"instructions\": \"What temporal scope does this turn express?\", \"type\": \"choice\"}}",
+      "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
+      "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
+      "confidence": 0.16666666666666666,
+      "latency_ms": 0.02006666666905706,
+      "cost": 0.0,
+      "created_at": "2026-09-20 23:46:55"
+    },
+    {
+      "id": 2,
+      "case_id": "diag-1",
+      "phase": "memory-routing",
+      "input_hash": "e9c862098ab682416a1c308e3a4b6e2403a3b2799a035b19f1a2df2017417a76",
+      "available_options": "{\"create_topic\": {\"instructions\": \"Is there a clear named topic worth a shallow child node?\", \"type\": \"noul\"}, \"memory_type\": {\"criteria\": {\"event\": \"A time-bounded occurrence\", \"fact\": \"A durable factual statement\", \"other\": \"None of the other memory types\", \"preference\": \"A like, dislike, habit, or choice\", \"procedure\": \"Instructions or a repeatable method\", \"state\": \"A condition that may change\"}, \"instructions\": \"What kind of memory is this conversation turn?\", \"type\": \"choice\"}, \"primary_branch\": {\"criteria\": {\"environment\": \"Tools, systems, configuration, locations, and current state\", \"episodes\": \"Events, conversations, and time-bounded experiences\", \"preferences\": \"Likes, dislikes, habits, choices, and personal preferences\", \"procedures\": \"Instructions, methods, recipes, and repeatable processes\", \"projects\": \"Named projects, work streams, goals, and tasks\", \"user\": \"Stable facts about the user and their identity or background\"}, \"instructions\": \"Which memory branch best fits this turn?\", \"type\": \"choice\"}, \"priority\": {\"criteria\": {\"high\": \"Likely important for future questions\", \"low\": \"Unlikely to matter later\", \"normal\": \"Ordinary memory value\"}, \"instructions\": \"How valuable is this turn for later retrieval?\", \"type\": \"choice\"}, \"temporal\": {\"criteria\": {\"current\": \"Describes the current state\", \"historical\": \"True in the past\", \"timeless\": \"Not tied to a time\", \"unknown\": \"Time scope is unclear\"}, \"instructions\": \"What temporal scope does this turn express?\", \"type\": \"choice\"}}",
+      "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
+      "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
+      "confidence": 0.16666666666666666,
+      "latency_ms": 0.02006666666905706,
+      "cost": 0.0,
+      "created_at": "2026-09-20 23:46:55"
+    },
+    {
+      "id": 3,
+      "case_id": "diag-1",
+      "phase": "memory-routing",
+      "input_hash": "e9c862098ab682416a1c308e3a4b6e2403a3b2799a035b19f1a2df2017417a76",
+      "available_options": "{\"create_topic\": {\"instructions\": \"Is there a clear named topic worth a shallow child node?\", \"type\": \"noul\"}, \"memory_type\": {\"criteria\": {\"event\": \"A time-bounded occurrence\", \"fact\": \"A durable factual statement\", \"other\": \"None of the other memory types\", \"preference\": \"A like, dislike, habit, or choice\", \"procedure\": \"Instructions or a repeatable method\", \"state\": \"A condition that may change\"}, \"instructions\": \"What kind of memory is this conversation turn?\", \"type\": \"choice\"}, \"primary_branch\": {\"criteria\": {\"environment\": \"Tools, systems, configuration, locations, and current state\", \"episodes\": \"Events, conversations, and time-bounded experiences\", \"preferences\": \"Likes, dislikes, habits, choices, and personal preferences\", \"procedures\": \"Instructions, methods, recipes, and repeatable processes\", \"projects\": \"Named projects, work streams, goals, and tasks\", \"user\": \"Stable facts about the user and their identity or background\"}, \"instructions\": \"Which memory branch best fits this turn?\", \"type\": \"choice\"}, \"priority\": {\"criteria\": {\"high\": \"Likely important for future questions\", \"low\": \"Unlikely to matter later\", \"normal\": \"Ordinary memory value\"}, \"instructions\": \"How valuable is this turn for later retrieval?\", \"type\": \"choice\"}, \"temporal\": {\"criteria\": {\"current\": \"Describes the current state\", \"historical\": \"True in the past\", \"timeless\": \"Not tied to a time\", \"unknown\": \"Time scope is unclear\"}, \"instructions\": \"What temporal scope does this turn express?\", \"type\": \"choice\"}}",
+      "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
+      "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
+      "confidence": 0.16666666666666666,
+      "latency_ms": 0.02006666666905706,
+      "cost": 0.0,
+      "created_at": "2026-09-20 23:46:55"
+    },
+    {
+      "id": 4,
+      "case_id": "diag-1",
+      "phase": "query-routing",
+      "input_hash": "a46d1c62d3ff8b0b1c6f32cfe573bc8b1545eb1ca5fb32405420203992bd6440",
+      "available_options": "{\"primary_branch\": {\"criteria\": {\"environment\": \"Tools, systems, configuration, locations, and current state\", \"episodes\": \"Events, conversations, and time-bounded experiences\", \"preferences\": \"Likes, dislikes, habits, choices, and personal preferences\", \"procedures\": \"Instructions, methods, recipes, and repeatable processes\", \"projects\": \"Named projects, work streams, goals, and tasks\", \"user\": \"Stable facts about the user and their identity or background\"}, \"instructions\": \"Which memory branch is most likely to contain the answer?\", \"type\": \"choice\"}, \"query_type\": {\"criteria\": {\"AGGREGATION\": \"Requires collecting or counting several facts\", \"LATEST_STATE\": \"The most recent value or current status\", \"MULTI_SESSION\": \"Requires evidence from multiple sessions\", \"POINT_LOOKUP\": \"One specific fact or answer\", \"PREFERENCE\": \"A like, dislike, habit, or preference\", \"TEMPORAL\": \"Dates, ordering, duration, before, or after\"}, \"instructions\": \"What retrieval pattern does this question require?\", \"type\": \"choice\"}, \"secondary_branch\": {\"criteria\": {\"environment\": \"Tools, systems, configuration, locations, and current state\", \"episodes\": \"Events, conversations, and time-bounded experiences\", \"none\": \"No additional branch\", \"preferences\": \"Likes, dislikes, habits, choices, and personal preferences\", \"procedures\": \"Instructions, methods, recipes, and repeatable processes\", \"projects\": \"Named projects, work streams, goals, and tasks\", \"user\": \"Stable facts about the user and their identity or background\"}, \"instructions\": \"Which additional branch is most useful?\", \"type\": \"choice\"}}",
+      "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
+      "probabilities": "{\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}",
+      "confidence": 0.16666666666666666,
+      "latency_ms": 0.0698000003467314,
+      "cost": 0.0,
+      "created_at": "2026-09-20 23:46:55"
+    },
+    {
+      "id": 5,
+      "case_id": "diag-1",
+      "phase": "evidence-sufficiency",
+      "input_hash": "2c28edd45a00f7aecbf32a95497d0b6ae7529be7008c3912e3006881a05df9f8",
+      "available_options": "{\"sufficient\": {\"instructions\": \"Does the actual answerer context contain enough information to answer the question correctly?\", \"type\": \"noul\"}}",
+      "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
+      "probabilities": "{\"sufficient\": 0.8}",
+      "confidence": 0.6000000000000001,
+      "latency_ms": 0.008600000001024455,
+      "cost": 0.0,
+      "created_at": "2026-09-20 23:46:55"
+    }
+  ],
+  "total_latency_ms": 28.108499998779735
+}

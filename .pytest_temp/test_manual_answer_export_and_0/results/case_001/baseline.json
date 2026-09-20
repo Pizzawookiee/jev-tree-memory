@@ -1,0 +1,62 @@
+{
+  "case_id": "case_001",
+  "question_type": "single-session-user",
+  "mode": "baseline",
+  "status": "awaiting_manual_judgment",
+  "question": "What drink?",
+  "query_type": "POINT_LOOKUP",
+  "backends": {
+    "embeddings": "deterministic-hash-fallback",
+    "reranker": "lexical-reranker-fallback",
+    "jev": null,
+    "answerer": "manual-chatgpt-import"
+  },
+  "retrieved_evidence": [
+    {
+      "sentence_id": 1,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "I drink tea.",
+      "vector_score": 0.40824827551841736,
+      "bm25_score": 1.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.6449489653110504,
+      "cross_score": 0.5,
+      "final_score": 0.5869693791866302,
+      "node_ids": []
+    }
+  ],
+  "context_turn_ids": [
+    1
+  ],
+  "packed_context": "\n[Session s1 | 2024-01-01]\nuser: I drink tea.\n",
+  "retrieval_metrics": {
+    "relevant_session_recall_at_5": 1.0,
+    "relevant_session_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_20": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "precision_at_context_cutoff": 1.0,
+    "answer_bearing_evidence_present": true,
+    "retrieved_candidates": 1,
+    "context_turns": 1
+  },
+  "stage_timings_ms": {
+    "embedding_model_load_ms": 0.007099999493220821,
+    "reranker_model_load_ms": 0.0016000012692529708,
+    "ingestion_ms": 0.4273000013199635,
+    "tree_initialization_ms": 0.3187000002071727
+  },
+  "total_latency_ms": 12.867599998571677,
+  "answer": "Tea",
+  "answer_token_usage": {
+    "input": 0,
+    "output": 0
+  },
+  "answer_estimated_cost": 0.0,
+  "answer_latency_ms": 0.0,
+  "answer_api_called": false
+}

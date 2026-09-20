@@ -1,0 +1,23 @@
+{
+  "evaluator_alias": "gpt-4o",
+  "evaluator_model": "gpt-4o-2024-08-06",
+  "hypothesis_file": "C:\\Users\\color\\jev-tree-memory\\.pytest_temp\\test_official_evaluator_pins_m0\\hypotheses.jsonl",
+  "reference_file": "C:\\Users\\color\\jev-tree-memory\\.pytest_temp\\test_official_evaluator_pins_m0\\oracle.json",
+  "evaluated": 1,
+  "task_averaged_accuracy": 1.0,
+  "overall_accuracy": 1.0,
+  "abstention_accuracy": null,
+  "abstention_count": 0,
+  "by_question_type": {
+    "single-session-user": {
+      "accuracy": 1.0,
+      "count": 1
+    }
+  },
+  "judge_token_usage": {
+    "input": 10,
+    "output": 1
+  },
+  "judge_latency_ms": 0.01669999983278103,
+  "judge_estimated_cost": 3.5e-05
+}

@@ -1,0 +1,54 @@
+{
+  "case_id": "q-user-1",
+  "question_type": "single-session-user",
+  "mode": "baseline",
+  "status": "retrieval-complete",
+  "question": "What is my job?",
+  "query_type": "POINT_LOOKUP",
+  "backends": {
+    "embeddings": "deterministic-hash-fallback",
+    "reranker": "lexical-reranker-fallback",
+    "jev": null,
+    "answerer": null
+  },
+  "retrieved_evidence": [
+    {
+      "sentence_id": 1,
+      "turn_id": 1,
+      "session_id": "s1",
+      "session_time": "2024-01-01",
+      "role": "user",
+      "content": "I am an engineer.",
+      "vector_score": 0.0,
+      "bm25_score": 0.0,
+      "jev_score": 0.0,
+      "priority_score": 0.5,
+      "hybrid_score": 0.0,
+      "cross_score": 0.0,
+      "final_score": 0.0,
+      "node_ids": []
+    }
+  ],
+  "context_turn_ids": [
+    1
+  ],
+  "packed_context": "\n[Session s1 | 2024-01-01]\nuser: I am an engineer.\n",
+  "retrieval_metrics": {
+    "relevant_session_recall_at_5": 1.0,
+    "relevant_session_recall_at_10": 1.0,
+    "relevant_evidence_recall_at_10": null,
+    "relevant_evidence_recall_at_20": null,
+    "mean_reciprocal_rank": 1.0,
+    "precision_at_context_cutoff": 0.0,
+    "answer_bearing_evidence_present": null,
+    "retrieved_candidates": 1,
+    "context_turns": 1
+  },
+  "stage_timings_ms": {
+    "embedding_model_load_ms": 0.016599999071331695,
+    "reranker_model_load_ms": 0.0042000028770416975,
+    "ingestion_ms": 1.6414000019722153,
+    "tree_initialization_ms": 1.2033999992127065
+  },
+  "total_latency_ms": 49.721700001100544
+}

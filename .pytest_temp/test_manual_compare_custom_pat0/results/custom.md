@@ -1,0 +1,41 @@
+# Manual Judge Prompt 1
+
+Manual judge ID: case_001:baseline
+
+## Copy everything below
+
+I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no.
+
+Question: What drink?
+
+Correct Answer: Tea
+
+Model Response: Tea
+
+Is the model response correct? Answer yes or no only.
+
+## Expected response
+
+yes or no
+
+---
+
+# Manual Judge Prompt 2
+
+Manual judge ID: case_001:jev-primary
+
+## Copy everything below
+
+I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no.
+
+Question: What drink?
+
+Correct Answer: Tea
+
+Model Response: Tea
+
+Is the model response correct? Answer yes or no only.
+
+## Expected response
+
+yes or no
