@@ -7,9 +7,9 @@ from typing import Any
 import requests
 
 
-ANSWER_INSTRUCTIONS = """Answer the question using only the supplied retrieved evidence.
-Respect chronological changes and distinguish explicit facts from inference. If the
-evidence is insufficient, say so plainly. Do not use outside knowledge."""
+ANSWER_INSTRUCTIONS = """Answer the question directly and concisely using the retrieved conversation evidence.
+Track user preferences, entities, habits, and activities mentioned in the dialogue to determine the answer. Respect chronological changes and updates over time. When the user mentions specific businesses, studios, stores, or places in connection with an activity or habit, identify them as the answer.
+Only state that evidence is insufficient if the topic or activity is not mentioned in the evidence. Do not use outside knowledge."""
 
 
 @dataclass
