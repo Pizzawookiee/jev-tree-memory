@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: jev-tree-memory
+Version: 0.1.0
+Summary: Controlled LongMemEval comparison of global retrieval and Jev-directed n-ary tree retrieval
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.26
+Requires-Dist: python-dotenv>=1.0
+Requires-Dist: requests>=2.31
+Requires-Dist: sentence-transformers>=6.0
+Requires-Dist: onnxruntime>=1.18
+Requires-Dist: truststore>=0.10; sys_platform == "win32"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"

@@ -1,0 +1,16 @@
+__pycache__/
+models/
+longmemeval_data/
+*.py[cod]
+.pytest_cache/
+.test-tmp/
+.env
+.env.*
+!.env.example
+results/*.sqlite
+results/*.json
+results/*.jsonl
+results/*.md
+results/*.eval-results-*
+results/databases/
+results/*/*.json

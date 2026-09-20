@@ -1,0 +1,11 @@
+numpy>=1.26
+python-dotenv>=1.0
+requests>=2.31
+sentence-transformers>=6.0
+onnxruntime>=1.18
+
+[:sys_platform == "win32"]
+truststore>=0.10
+
+[dev]
+pytest>=8.0
