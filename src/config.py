@@ -38,7 +38,7 @@ class Settings:
     max_assignments: int = 2
     max_new_topics: int = 1
     max_search_steps: int = 6
-    jev_routing_batch_size: int = 25
+    jev_routing_batch_size: int = 10
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -65,5 +65,5 @@ class Settings:
             embedding_batch_size=int(os.getenv("EMBEDDING_BATCH_SIZE", "256")),
             reranker_batch_size=int(os.getenv("RERANKER_BATCH_SIZE", "64")),
             results_dir=Path(os.getenv("RESULTS_DIR", "results")),
-            jev_routing_batch_size=int(os.getenv("JEV_ROUTING_BATCH_SIZE", "25")),
+            jev_routing_batch_size=int(os.getenv("JEV_ROUTING_BATCH_SIZE", "10")),
         )

@@ -28,7 +28,10 @@ JEV_INPUT_USD_PER_MILLION_TOKENS = 0.042
 TRIVIAL_ACKNOWLEDGEMENTS = {
     "acknowledged", "alright", "cool", "got it", "great", "makes sense", "noted",
     "okay", "ok", "sounds good", "sure", "thanks", "thank you", "understood",
-    "will do", "youre welcome", "you're welcome",
+    "will do", "youre welcome", "you're welcome", "you are welcome", "no problem",
+    "anytime", "happy to help", "glad to help", "yes", "no", "yep", "nope",
+    "yeah", "nah", "perfect", "awesome", "excellent", "sounds great", "fine", "done",
+    "hello", "hi", "hey",
 }
 
 
@@ -304,7 +307,8 @@ class JevMemoryRouter:
                 completed += len(unit["rows"])
             else:
                 unit["questions"] = questions
-                unit["state"] = f"Role: {unit['role']}\nContent: {unit['content']}"
+                routing_content = unit["content"][:400] + "..." if len(unit["content"]) > 400 else unit["content"]
+                unit["state"] = f"Role: {unit['role']}\nContent: {routing_content}"
                 misses.append(unit)
         if show_progress and completed > completed_before:
             display(completed, final=completed == total)
@@ -347,7 +351,8 @@ class JevMemoryRouter:
 
     def route(self, case_id: str, sentence_id: int, content: str) -> MemoryDecision:
         questions = self._questions(self.profile)
-        answers, usage, latency = self.client.ask(content, questions)
+        routing_content = content[:400] + "..." if len(content) > 400 else content
+        answers, usage, latency = self.client.ask(routing_content, questions)
         cost_for_usage = getattr(self.client, "cost_for_usage", lambda _usage: 0.0)
         return self._apply_decision(
             case_id, sentence_id, content, questions, answers, latency, cost_for_usage(usage)
@@ -407,7 +412,8 @@ class JevMemoryRouter:
         action = {"memory_type": memory_type, "retrieval_priority": priority, "temporal_scope": temporal,
                   "selected_node_ids": assigned, "create_topic": bool(create and assigned != selected), "topic": topic,
                   "routing_profile": self.profile, "decision_source": source}
+        options_to_log = questions if self.profile == "full" else {}
         self.db.log_decision(case_id=case_id, phase="memory-routing", input_hash=hashlib.sha256(content.encode()).hexdigest(),
-                             options=questions, action=action, probabilities=probabilities, confidence=confidence,
+                             options=options_to_log, action=action, probabilities=probabilities, confidence=confidence,
                              latency_ms=latency, cost=cost)
         return MemoryDecision(memory_type, priority, temporal, assigned, create, topic, confidence, probabilities)

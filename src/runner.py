@@ -249,8 +249,24 @@ def _retrieve_case(case, mode: str, settings: Settings, args) -> dict:
             "cross_case_cache_hits": jev_router.cache_hits if jev_router else 0,
             "trivial_turns_filtered": jev_router.trivial_turns if jev_router else 0,
         }
-        artifact["jev_trace"] = [dict(row) for row in db.conn.execute(
-            "SELECT * FROM jev_decisions WHERE case_id=? ORDER BY id", (case.case_id,))]
+        if args.full_jev_diagnostics:
+            artifact["jev_trace"] = [dict(row) for row in db.conn.execute(
+                "SELECT * FROM jev_decisions WHERE case_id=? ORDER BY id", (case.case_id,))]
+        else:
+            trace_rows = [
+                dict(row) for row in db.conn.execute(
+                    "SELECT id,case_id,phase,input_hash,selected_action,confidence,latency_ms,cost "
+                    "FROM jev_decisions WHERE case_id=? AND phase != 'memory-routing' ORDER BY id",
+                    (case.case_id,),
+                )
+            ]
+            artifact["jev_trace"] = trace_rows or [
+                dict(row) for row in db.conn.execute(
+                    "SELECT id,case_id,phase,input_hash,selected_action,confidence,latency_ms,cost "
+                    "FROM jev_decisions WHERE case_id=? ORDER BY id LIMIT 5",
+                    (case.case_id,),
+                )
+            ]
     db.close()
     return artifact
 
@@ -355,6 +371,8 @@ def run_case(case, modes: list[str], settings: Settings, args) -> list[dict]:
         artifact["total_latency_ms"] = artifact.get("total_latency_ms", 0) + (time.perf_counter() - started) * 1000
         _write_json(path, artifact)
         outputs.append(artifact)
+    if getattr(args, "clean_db", False) and db_path.exists():
+        db_path.unlink()
     return outputs
 
 
@@ -394,6 +412,10 @@ def parse_args(argv=None):
         help="use full five-question Jev metadata routing and disable trivial-turn filtering",
     )
     parser.add_argument("--allow-model-fallback", action="store_true")
+    parser.add_argument(
+        "--clean-db", action="store_true",
+        help="remove per-case SQLite database file after artifact generation to conserve storage",
+    )
     parser.add_argument("--dataset", type=Path)
     args = parser.parse_args(argv)
     if args.manual_judge and args.retrieval_only:

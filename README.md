@@ -83,7 +83,9 @@ python -m src.runner --mode jev-primary --all --judge-only --resume
 Use `--hypothesis-output PATH` to override the JSONL path for a single mode and
 `--official-reference PATH` to override the evaluation reference file.
 
-Results and per-case SQLite files are written to `results/`. `--resume` skips a
+Results and per-case SQLite files are written to `results/`. Use `--clean-db` to
+automatically delete per-case SQLite databases after generation, keeping total disk
+usage under 50 MB for the full 500-case evaluation. `--resume` skips a
 mode only when its completed JSON artifact already exists. For offline smoke
 tests only, `--allow-model-fallback` enables deterministic hashing embeddings,
 lexical reranking, deterministic Jev routing, and an extractive smoke-test answer. Fallback artifacts identify

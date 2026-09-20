@@ -57,3 +57,56 @@ def test_answer_only_writes_official_hypothesis_file(tmp_path, monkeypatch):
     entry = json.loads(output.read_text(encoding="utf-8"))
     assert set(entry) == {"question_id", "hypothesis"}
     assert entry["question_id"] == "official-1"
+
+
+def test_clean_db_removes_sqlite_database(tmp_path, monkeypatch):
+    dataset = tmp_path / "longmemeval.json"
+    dataset.write_text(json.dumps([{
+        "question_id": "clean-1", "question_type": "single-session-user",
+        "question": "What drink?", "answer": "tea", "question_date": "2024-02-01",
+        "haystack_session_ids": ["s1"], "haystack_dates": ["2024-01-01"],
+        "haystack_sessions": [[{"role": "user", "content": "I drink tea.", "has_answer": True}]],
+        "answer_session_ids": ["s1"],
+    }]), encoding="utf-8")
+    results = tmp_path / "results"
+    monkeypatch.setenv("RESULTS_DIR", str(results))
+    assert runner.main([
+        "--mode", "baseline", "--dataset", str(dataset), "--retrieval-only",
+        "--clean-db", "--allow-model-fallback",
+    ]) == 0
+    assert (results / "clean-1" / "baseline.json").exists()
+    assert not (results / "databases" / "clean-1.sqlite").exists()
+
+
+def test_jev_trace_compact_vs_full_diagnostics(tmp_path, monkeypatch):
+    dataset = tmp_path / "longmemeval.json"
+    dataset.write_text(json.dumps([{
+        "question_id": "diag-1", "question_type": "single-session-user",
+        "question": "What drink?", "answer": "tea", "question_date": "2024-02-01",
+        "haystack_session_ids": ["s1"], "haystack_dates": ["2024-01-01"],
+        "haystack_sessions": [[{"role": "user", "content": "Fact one. Fact two. Fact three.", "has_answer": True}]],
+        "answer_session_ids": ["s1"],
+    }]), encoding="utf-8")
+    results = tmp_path / "results"
+    monkeypatch.setenv("RESULTS_DIR", str(results))
+    # Compact run
+    assert runner.main([
+        "--mode", "jev-primary", "--dataset", str(dataset), "--retrieval-only",
+        "--allow-model-fallback",
+    ]) == 0
+    compact_jev = json.loads((results / "diag-1" / "jev-primary.json").read_text())
+    assert compact_jev["jev_trace"]
+    # All rows in compact trace are search decisions (or non-memory-routing)
+    assert all(step.get("phase") != "memory-routing" for step in compact_jev["jev_trace"])
+
+    # Full diagnostics run
+    results_full = tmp_path / "results_full"
+    monkeypatch.setenv("RESULTS_DIR", str(results_full))
+    assert runner.main([
+        "--mode", "jev-primary", "--dataset", str(dataset), "--retrieval-only",
+        "--full-jev-diagnostics", "--allow-model-fallback",
+    ]) == 0
+    full_jev = json.loads((results_full / "diag-1" / "jev-primary.json").read_text())
+    assert any(step.get("phase") == "memory-routing" for step in full_jev["jev_trace"])
+    assert len(full_jev["jev_trace"]) > len(compact_jev["jev_trace"])
+

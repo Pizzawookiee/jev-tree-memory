@@ -166,3 +166,51 @@ def test_cross_case_cache_reuses_same_role_and_content(tmp_path):
     action = json.loads(second_db.conn.execute("SELECT selected_action FROM jev_decisions").fetchone()[0])
     assert action["decision_source"] == "cross-case-cache"
     cache.close()
+
+
+def test_long_turn_is_truncated_for_routing_state(tmp_path):
+    class RecordingClient:
+        backend = "recording"
+        def __init__(self):
+            self.recorded_states = []
+            self.request_count = 0
+            self.input_tokens = 0
+            self.output_tokens = 0
+            self.total_latency_ms = 0.0
+
+        def ask_batch(self, items):
+            self.request_count += 1
+            for state, questions in items:
+                self.recorded_states.append(state)
+            return [
+                {
+                    "priority": {"choice": "normal", "probabilities": {"normal": 1.0}, "confidence": 1.0},
+                    "primary_branch": {"choice": "projects", "probabilities": {"projects": 1.0}, "confidence": 1.0},
+                }
+                for _ in items
+            ], {"input_tokens": 10, "output_tokens": 2}, 1.0
+
+        def cost_for_usage(self, usage):
+            return 0.0
+
+    long_text = "Word " * 500  # 2,500 characters
+    case = BenchmarkCase(
+        "q_long", "", "q", None,
+        (TurnInput("s", 0, 0, "user", long_text, None),), None, (), (),
+    )
+    db = MemoryDB(tmp_path / "long.sqlite")
+    ingest_case(db, case, HashEmbedder())
+    tree = MemoryTree(db, HashEmbedder())
+    tree.initialize()
+    client = RecordingClient()
+    router = JevMemoryRouter(db, tree, client, profile="lean")
+    router.route_all("q_long", show_progress=False)
+    assert client.request_count == 1
+    assert len(client.recorded_states) == 1
+    # Check that routing state was truncated
+    assert len(client.recorded_states[0]) < 500
+    assert client.recorded_states[0].endswith("...")
+    # Verify raw turn and sentences in DB remain full and intact
+    db_turn = db.conn.execute("SELECT content FROM turns").fetchone()[0]
+    assert db_turn == long_text
+
