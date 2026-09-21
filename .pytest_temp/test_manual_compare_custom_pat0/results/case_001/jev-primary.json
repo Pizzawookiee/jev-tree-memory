@@ -59,7 +59,7 @@
         "user"
       ],
       "average_decision_confidence": 0.3111111111111111,
-      "jev_latency_ms": 0.08550000347895548,
+      "jev_latency_ms": 0.11420000009820797,
       "jev_cost": 0.0,
       "routing_profile": "lean",
       "cross_case_cache_hits": 0,
@@ -68,9 +68,9 @@
     "candidate_reduction_vs_corpus": 0.0
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.011100000847363845,
-    "reranker_model_load_ms": 0.0040000013541430235,
-    "tree_initialization_ms": 0.03369999831193127
+    "embedding_model_load_ms": 0.008799997885944322,
+    "reranker_model_load_ms": 0.003999997716164216,
+    "tree_initialization_ms": 0.03520000245771371
   },
   "jev_usage": {
     "routing_profile": "lean",
@@ -91,7 +91,7 @@
       "input_hash": "a46d1c62d3ff8b0b1c6f32cfe573bc8b1545eb1ca5fb32405420203992bd6440",
       "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.053499999921768904,
+      "latency_ms": 0.0670000008540228,
       "cost": 0.0
     },
     {
@@ -101,10 +101,10 @@
       "input_hash": "2b8e0d574c7aca278f11d92de19f5b96fbe6ea6d935fa3a53b7f36e052adcafd",
       "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
       "confidence": 0.6000000000000001,
-      "latency_ms": 0.004600002284860238,
+      "latency_ms": 0.008299997716676444,
       "cost": 0.0
     }
   ],
   "answer": "Tea",
-  "total_latency_ms": 17.034399996191496
+  "total_latency_ms": 22.260599998844555
 }

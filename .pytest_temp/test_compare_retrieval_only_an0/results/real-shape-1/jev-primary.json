@@ -110,7 +110,7 @@
         "preferences"
       ],
       "average_decision_confidence": 0.7186868686868687,
-      "jev_latency_ms": 0.1260999997612089,
+      "jev_latency_ms": 0.1143000008596573,
       "jev_cost": 0.0,
       "routing_profile": "lean",
       "cross_case_cache_hits": 0,
@@ -119,9 +119,9 @@
     "candidate_reduction_vs_corpus": 0.0
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.020200001017656177,
-    "reranker_model_load_ms": 0.0026999987312592566,
-    "tree_initialization_ms": 0.026699999580159783
+    "embedding_model_load_ms": 0.013599998055724427,
+    "reranker_model_load_ms": 0.004599998646881431,
+    "tree_initialization_ms": 0.042100000428035855
   },
   "jev_usage": {
     "routing_profile": "lean",
@@ -142,7 +142,7 @@
       "input_hash": "a696131447d31211e9ed2d9f597419b93c093683a71956a0e9c2bcbf624fd2d3",
       "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"PREFERENCE\", \"selected_child_ids\": [\"preferences\"]}",
       "confidence": 0.7727272727272727,
-      "latency_ms": 0.06659999780822545,
+      "latency_ms": 0.06669999856967479,
       "cost": 0.0
     },
     {
@@ -152,9 +152,9 @@
       "input_hash": "379253dde83cea6630077da3e0a8d6ec8fc52381c3d47812c820d2608df37471",
       "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
       "confidence": 0.6000000000000001,
-      "latency_ms": 0.006800000846851617,
+      "latency_ms": 0.012700002116616815,
       "cost": 0.0
     }
   ],
-  "total_latency_ms": 18.4506000005058
+  "total_latency_ms": 24.002499998459825
 }

@@ -96,10 +96,10 @@
     "context_turns": 4
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.008299997716676444,
-    "reranker_model_load_ms": 0.0031999989005271345,
-    "ingestion_ms": 0.9893000024021603,
-    "tree_initialization_ms": 0.48349999997299165
+    "embedding_model_load_ms": 0.010200001270277426,
+    "reranker_model_load_ms": 0.0036999990697950125,
+    "ingestion_ms": 0.8736999989196192,
+    "tree_initialization_ms": 0.46099999963189475
   },
-  "total_latency_ms": 16.242699999565957
+  "total_latency_ms": 16.01999999547843
 }

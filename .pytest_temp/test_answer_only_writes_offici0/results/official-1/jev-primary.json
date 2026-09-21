@@ -59,7 +59,7 @@
         "user"
       ],
       "average_decision_confidence": 0.3111111111111111,
-      "jev_latency_ms": 0.06660000144620426,
+      "jev_latency_ms": 0.12090000382158905,
       "jev_cost": 0.0,
       "routing_profile": "lean",
       "cross_case_cache_hits": 0,
@@ -68,10 +68,10 @@
     "candidate_reduction_vs_corpus": 0.0
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.007200000254670158,
-    "reranker_model_load_ms": 0.0022999993234407157,
-    "ingestion_ms": 0.4914999990432989,
-    "tree_initialization_ms": 0.28949999978067353
+    "embedding_model_load_ms": 0.009700001101009548,
+    "reranker_model_load_ms": 0.0034999975468963385,
+    "ingestion_ms": 0.8584999995946418,
+    "tree_initialization_ms": 0.4859000000578817
   },
   "jev_usage": {
     "routing_profile": "lean",
@@ -92,7 +92,7 @@
       "input_hash": "a46d1c62d3ff8b0b1c6f32cfe573bc8b1545eb1ca5fb32405420203992bd6440",
       "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.035300003219163045,
+      "latency_ms": 0.0714999987394549,
       "cost": 0.0
     },
     {
@@ -102,7 +102,7 @@
       "input_hash": "2b8e0d574c7aca278f11d92de19f5b96fbe6ea6d935fa3a53b7f36e052adcafd",
       "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
       "confidence": 0.6000000000000001,
-      "latency_ms": 0.004800000169780105,
+      "latency_ms": 0.007100003131199628,
       "cost": 0.0
     }
   ],
@@ -114,5 +114,5 @@
   "answer_estimated_cost": 0.0,
   "answer_latency_ms": 0.0,
   "answer_api_called": false,
-  "total_latency_ms": 22.23990000129561
+  "total_latency_ms": 37.56029999931343
 }

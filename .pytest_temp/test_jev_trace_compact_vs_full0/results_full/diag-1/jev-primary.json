@@ -95,7 +95,7 @@
         "user"
       ],
       "average_decision_confidence": 0.2533333333333333,
-      "jev_latency_ms": 0.12650000280700624,
+      "jev_latency_ms": 0.13210000179242343,
       "jev_cost": 0.0,
       "routing_profile": "full",
       "cross_case_cache_hits": 0,
@@ -104,10 +104,10 @@
     "candidate_reduction_vs_corpus": 0.0
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.00969999746303074,
-    "reranker_model_load_ms": 0.0024000000848900527,
-    "ingestion_ms": 1.019399998767767,
-    "tree_initialization_ms": 0.4942999985360075
+    "embedding_model_load_ms": 0.008300001354655251,
+    "reranker_model_load_ms": 0.0026000016077887267,
+    "ingestion_ms": 1.0959999999613501,
+    "tree_initialization_ms": 0.7643999997526407
   },
   "jev_usage": {
     "routing_profile": "full",
@@ -130,9 +130,9 @@
       "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
       "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.01906666754318091,
+      "latency_ms": 0.018666666922702763,
       "cost": 0.0,
-      "created_at": "2026-09-20 23:58:09"
+      "created_at": "2026-09-21 00:19:20"
     },
     {
       "id": 2,
@@ -143,9 +143,9 @@
       "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
       "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.01906666754318091,
+      "latency_ms": 0.018666666922702763,
       "cost": 0.0,
-      "created_at": "2026-09-20 23:58:09"
+      "created_at": "2026-09-21 00:19:20"
     },
     {
       "id": 3,
@@ -156,9 +156,9 @@
       "selected_action": "{\"create_topic\": false, \"decision_source\": \"jev-api\", \"memory_type\": \"fact\", \"retrieval_priority\": \"low\", \"routing_profile\": \"full\", \"selected_node_ids\": [\"user\"], \"temporal_scope\": \"timeless\", \"topic\": null}",
       "probabilities": "{\"create_topic\": {\"yes\": 0.2}, \"memory_type\": {\"event\": 0.16666666666666666, \"fact\": 0.16666666666666666, \"other\": 0.16666666666666666, \"preference\": 0.16666666666666666, \"procedure\": 0.16666666666666666, \"state\": 0.16666666666666666}, \"primary_branch\": {\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}, \"priority\": {\"high\": 0.3333333333333333, \"low\": 0.3333333333333333, \"normal\": 0.3333333333333333}, \"temporal\": {\"current\": 0.25, \"historical\": 0.25, \"timeless\": 0.25, \"unknown\": 0.25}}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.01906666754318091,
+      "latency_ms": 0.018666666922702763,
       "cost": 0.0,
-      "created_at": "2026-09-20 23:58:09"
+      "created_at": "2026-09-21 00:19:20"
     },
     {
       "id": 4,
@@ -169,9 +169,9 @@
       "selected_action": "{\"action\": \"SELECT_CHILDREN\", \"candidate_budget\": 40, \"query_type\": \"POINT_LOOKUP\", \"selected_child_ids\": [\"user\"]}",
       "probabilities": "{\"environment\": 0.16666666666666666, \"episodes\": 0.16666666666666666, \"preferences\": 0.16666666666666666, \"procedures\": 0.16666666666666666, \"projects\": 0.16666666666666666, \"user\": 0.16666666666666666}",
       "confidence": 0.16666666666666666,
-      "latency_ms": 0.06429999848478474,
+      "latency_ms": 0.06850000136182643,
       "cost": 0.0,
-      "created_at": "2026-09-20 23:58:09"
+      "created_at": "2026-09-21 00:19:20"
     },
     {
       "id": 5,
@@ -182,10 +182,10 @@
       "selected_action": "{\"action\": \"STOP\", \"candidate_budget\": 0, \"selected_child_ids\": []}",
       "probabilities": "{\"sufficient\": 0.8}",
       "confidence": 0.6000000000000001,
-      "latency_ms": 0.005000001692678779,
+      "latency_ms": 0.007599999662488699,
       "cost": 0.0,
-      "created_at": "2026-09-20 23:58:09"
+      "created_at": "2026-09-21 00:19:20"
     }
   ],
-  "total_latency_ms": 26.179200001934078
+  "total_latency_ms": 33.52880000238656
 }

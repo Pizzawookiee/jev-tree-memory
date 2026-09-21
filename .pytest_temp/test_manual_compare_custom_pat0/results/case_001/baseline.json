@@ -45,11 +45,11 @@
     "context_turns": 1
   },
   "stage_timings_ms": {
-    "embedding_model_load_ms": 0.015899997379165143,
-    "reranker_model_load_ms": 0.006399997801054269,
-    "ingestion_ms": 0.6737000003340654,
-    "tree_initialization_ms": 0.6864999995741528
+    "embedding_model_load_ms": 0.014900000678608194,
+    "reranker_model_load_ms": 0.005999998393235728,
+    "ingestion_ms": 0.6204999990586657,
+    "tree_initialization_ms": 0.4894999983662274
   },
   "answer": "Tea",
-  "total_latency_ms": 17.70820000092499
+  "total_latency_ms": 15.90800000121817
 }
